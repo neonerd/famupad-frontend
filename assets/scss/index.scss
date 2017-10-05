@@ -1,0 +1,51 @@
+@import "~bulma";
+
+body {
+}
+
+.content-top-buttons {
+  display: block;
+  padding-bottom: 20px;
+
+  text-align: right;
+
+  &.no-padding {
+    padding-bottom: 0px;
+  }
+}
+
+.table {
+  &.with-clickable-rows {
+    tbody tr {cursor: pointer;}
+  }
+  td .button {
+    margin-right: 10px;
+  }
+  td {
+    vertical-align: middle;
+  }
+}
+
+.label-with-checkbox {
+  input {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.v-select {
+  width: 100%;
+
+  .dropdown-toggle {
+    width: 100%;
+  }
+}
+
+
+// Typography
+.title {
+
+}

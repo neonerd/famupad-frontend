@@ -34,7 +34,7 @@
               .field
                 label.label Telefon
                 .control
-                  input(type="text", placeholder="Telefonický kontakt", required, v-model="person.phone").input
+                  input(type="text", placeholder="Telefonický kontakt", v-model="person.phone").input
               .field
                 label.label Web (URL)
                 .control

@@ -33,6 +33,14 @@
                 .control
                   input(type="number", placeholder="Napr. 2016", required, v-model="project.year").input
               .field
+                label.label Synopse
+                .control
+                  textarea(required, v-model="project.synopsis").textarea
+              .field
+                label.label Popis
+                .control
+                  textarea(required, v-model="project.description").textarea
+              .field
                 .control.has-text-centered
                   button(type="submit").button.is-primary Vytvořit projekt
 </template>
@@ -83,7 +91,9 @@ export default {
         project_type_id: null,
         project_excercise_id: null,
         state: projectStateOptions[0],
-        year: ''
+        year: '',
+        synopsis: '',
+        description: ''
       }
     }
   }

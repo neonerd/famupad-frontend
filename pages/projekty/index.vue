@@ -5,37 +5,62 @@
       h1.title Projekty
 
       .content-top-buttons.no-padding
-          nuxt-link(to="/vytvorit/projekt").button.is-primary Vytvořit nový projekt
+          nuxt-link(to="/vytvorit/projekt", v-show="isAdmin").button.is-primary Vytvořit nový projekt
 
       .tabs
         ul
           li(v-for="projectType in mainFilters", :class="{'is-active': projectType.id == selectedMainFilter}")
             a(href="", @click.prevent="selectMainFilter(projectType.id)") {{ projectType.name }}
 
+      .columns
+          .column.selects
+            .select
+              select(name="projectSorting", v-model="projectSorting").select
+                option(value="-year") Seřadit dle data vzniku
+                option(value="-createdAt") Seřadit dle data přidání
+                option(value="name") Seřadit dle názvu
+            .select
+              select(name="projectDepartmentId", v-model="projectDepartmentId").select
+                option(value="") Všechny katedry
+                option(v-for="department in departments", :value="department.id", :key="department.id") {{ department.name }}
+
       template(v-if="viewType == 'tiles'")
-        .columns
+        .columns.is-multiline
           .column.is-one-quarter(v-for="project in projects")
             .card.is-clickable(@click="goToProject(project.slug)")
               .card-image
-                figure.image.is-16by9(style="background-image: url('\/\/img\.csfd\.cz\/files\/images\/film\/photos\/161\/466\/161466474_bfc141\.jpg\?w700')")
+                figure.image.is-16by9(:style="`background-position: center center; background-image: url(${projectMainIllustrations[project.id]});`")
               .card-content
                 .media
                   .media-content
+                    span.like.active(v-show="project.like") ❤
                     p.title {{ project.name }}
                 .content
+                  p(v-if="project.people[0]").meta
+                    small {{ project.people[0].positionName | positionToAcronym }} {{ project.people[0].lastName }} {{ project.people[0].firstName }}
+                  p(v-else).meta &nbsp;
                   p {{ project.synopsis }}
-
-
+                  
 </template>
 
 <script>
-import {getEntities} from '@/api'
+import * as R from 'ramda'
+
+import {getEntities, API_URL} from '@/api'
 
 export default {
   components: {
   },
   mounted () {
     this.loadProjects()
+  },
+  watch: {
+    projectDepartmentId () {
+      this.loadProjects()
+    },
+    projectSorting () {
+      this.loadProjects()
+    }
   },
   computed: {
     mainFilters () {
@@ -47,6 +72,22 @@ export default {
       } else {
         return 0
       }
+    },
+    projectMainIllustrations () {
+      const illustrations = {}
+      this.projects.map(p => {
+        const customIllustration = R.find(f => f.type === 'photo', p.files)
+        if (customIllustration) {
+          illustrations[p.id] = `${API_URL}/files/${customIllustration.id}`
+        } else {
+          illustrations[p.id] = '/illustration_movie_na.jpg'
+        }
+      })
+
+      return illustrations
+    },
+    isAdmin () {
+      return this.$store.getters['auth/isAdmin']
     }
   },
   methods: {
@@ -55,6 +96,10 @@ export default {
       if (this.$store.state.viewSettings.settings['projects.selectedMainFilter'] !== 0) {
         parameters.projectTypeId = this.$store.state.viewSettings.settings['projects.selectedMainFilter']
       }
+
+      parameters.departmentId = this.projectDepartmentId
+      parameters.sort = this.projectSorting
+
       getEntities('projects', parameters).then(projects => {
         this.projects = projects
       })
@@ -69,15 +114,36 @@ export default {
   },
   async asyncData () {
     const projectTypes = await getEntities('projectTypes')
+    const departments = await getEntities('departments')
 
     return {
+      // Options
       projectTypes,
+      departments,
+
+      // View options
       viewType: 'tiles',
-      projects: []
+      projects: [],
+
+      // Parameters
+      projectSorting: '-year',
+      projectDepartmentId: ''
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  select {
+    height: 40px;
+  }
+  .selects > .select {
+    margin-right: 1rem;
+  }
+  p.meta {
+    margin-top: -10px;
+  }
+  .card {
+    height: 100%;
+  }
 </style>

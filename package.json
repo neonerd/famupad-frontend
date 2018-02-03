@@ -15,8 +15,9 @@
   "dependencies": {
     "axios": "^0.16.2",
     "bulma": "^0.5.2",
-    "nuxt": "^1.0.0-rc11",
+    "nuxt": "^1.0.0",
     "ramda": "^0.24.1",
+    "store": "^2.0.12",
     "vue-select": "^2.3.0"
   },
   "devDependencies": {

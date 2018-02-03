@@ -10,6 +10,10 @@
                 .control
                   input(type="text", placeholder="Název pozice (napr.: Režisér)", required, v-model="projectPosition.name").input
               .field
+                label.label Priorita
+                .control
+                  input(type="number", placeholder="Priorita pozice v řazení (vzestupně)", required, v-model="projectPosition.priority").input
+              .field
                 .control.has-text-centered
                   button(type="submit").button.is-primary Upravit pozici
 </template>

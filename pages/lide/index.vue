@@ -5,11 +5,19 @@
       h1.title Lidé
 
       .content-top-buttons.no-padding
-          nuxt-link(to="/vytvorit/osoba").button.is-primary Vytvořit novou osobu
+          nuxt-link(to="/vytvorit/osoba", v-show="isAdmin").button.is-primary Vytvořit novou osobu
+
       .tabs
         ul
           li(v-for="department in mainFilters", :class="{'is-active': department.id == selectedMainFilter}")
             a(href="", @click.prevent="selectMainFilter(department.id)") {{ department.acronym }}
+
+      .columns
+          .column.selects
+            .select
+              select(name="personSorting", v-model="personSorting").select
+                option(value="lastName") Seřadit dle příjmění
+                option(value="-enrolledAt") Seřadit dle roku nástupu
 
       .content
         table.table.with-clickable-rows
@@ -18,13 +26,11 @@
               th Příjmení a jméno
               th Katedra
               th Rok nástupu
-              th Počet projektu
           tbody
             tr(v-for="person in people", @click="goToPerson(person.slug)")
               td {{ person.lastName }}, {{ person.firstName }}
               td {{ person.departmentAcronym }}
               td {{ person.enrolledAt }}
-              td 0 / 0 / 0
 
 </template>
 
@@ -44,6 +50,14 @@ export default {
       } else {
         return 0
       }
+    },
+    isAdmin () {
+      return this.$store.getters['auth/isAdmin']
+    }
+  },
+  watch: {
+    personSorting () {
+      this.reloadPeople()
     }
   },
   methods: {
@@ -52,6 +66,9 @@ export default {
       if (this.$store.state.viewSettings.settings['people.selectedMainFilter'] !== 0) {
         parameters.departmentId = this.$store.state.viewSettings.settings['people.selectedMainFilter']
       }
+
+      parameters.sort = this.personSorting
+
       getEntities('people', parameters).then(people => {
         this.people = people
       })
@@ -64,12 +81,15 @@ export default {
       this.reloadPeople()
     }
   },
+  mounted () {
+    this.reloadPeople()
+  },
   async asyncData () {
     const departments = await getEntities('departments')
-    const people = await getEntities('people')
     return {
-      people,
-      departments
+      people: [],
+      departments,
+      personSorting: 'lastName'
     }
   }
 }

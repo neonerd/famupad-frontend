@@ -24,7 +24,8 @@ module.exports = {
   */
   loading: { color: '#3B8070' },
   plugins: [
-    {src: '~plugins/globalComponents', ssr: false}
+    {src: '~plugins/globalComponents', ssr: false},
+    {src: '~plugins/clientInit', ssr: false}
   ],
   /*
   ** Build configuration

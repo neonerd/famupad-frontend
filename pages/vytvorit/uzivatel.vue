@@ -13,6 +13,10 @@
                 .control
                   input(type="text", placeholder="Email, pod kterým se bude uživatel přihlašovat", required, v-model="user.email").input
               .field
+                label.label Heslo
+                .control
+                  input(type="text", placeholder="Heslo, kterým se bude uživatel přihlašovat", required, v-model="user.password").input
+              .field
                 label.label Role
                 .control
                   select(v-model="user.role").input

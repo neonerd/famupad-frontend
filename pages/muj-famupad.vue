@@ -13,7 +13,7 @@
           .column.selects
             .select
               select(name="projectSorting", v-model="projectSorting").select
-                option(value="-year") Seřadit dle data vzniku
+                option(value="-year") Seřadit dle roku vzniku
                 option(value="-createdAt") Seřadit dle data přidání
                 option(value="name") Seřadit dle názvu
             .select

@@ -44,6 +44,7 @@ export default {
     return {
       user: {
         email: '',
+        password: '',
         role: 'user'
       },
       userRoles

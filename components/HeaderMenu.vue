@@ -7,6 +7,7 @@
       .navbar-start
         nuxt-link(to="/projekty", v-show="isLoggedIn").navbar-item Projekty
         nuxt-link(to="/lide", v-show="isLoggedIn").navbar-item Lidé
+        nuxt-link(to="/muj-famupad", v-show="isLoggedIn").navbar-item Můj FamuPAD
         nuxt-link(to="/data", v-show="isLoggedIn && user.role=='admin'").navbar-item Data
         nuxt-link(to="/uzivatele", v-show="isLoggedIn && user.role=='admin'").navbar-item Uživatelé
         nuxt-link(to="/", v-show="!isLoggedIn").navbar-item Přihlášení

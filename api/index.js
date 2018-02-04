@@ -3,7 +3,7 @@ import axios from 'axios'
 import { toPairs } from 'ramda'
 
 // Setup
-export const API_URL = 'http://localhost:3010'
+export const API_URL = process.env.API_URL || 'http://localhost:3010'
 const axiosInstance = axios.create({
   baseURL: API_URL
 })

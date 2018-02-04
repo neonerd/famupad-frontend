@@ -76,7 +76,7 @@
                 td {{ projectFileTypes.filter(t => t.value==file.type)[0].label }}
                 td
                   span
-                    a(:href="`http://localhost:3010/files/${file.id}`", target="_blank") Stáhnout
+                    a(:href="`${API_URL}/files/${file.id}`", target="_blank") Stáhnout
                   span(v-show="isAdmin") &nbsp;| 
                   span(v-show="isAdmin")
                     a(href="javascript: void(0);", @click="removeFileFromProject(file.id)") Smazat
@@ -130,7 +130,7 @@
 </template>
 
 <script>
-import {fetchEntity, getEntities, deleteEntities, createEntity} from '@/api'
+import {fetchEntity, getEntities, deleteEntities, createEntity, API_URL} from '@/api'
 import {extractOptionsFromObjects} from '@/lib/util'
 
 import Modal from '@/components/Modal'
@@ -238,6 +238,8 @@ export default {
 
       slug: params.slug,
       project: {},
+
+      API_URL,
 
       isAddingPerson: false,
       isAddingFile: false,

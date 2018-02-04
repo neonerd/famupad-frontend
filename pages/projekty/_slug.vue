@@ -32,6 +32,11 @@
           h2 Popis
           p {{ project.description }}
 
+      .columns.is-centered(v-if="embeddableObjects[0]").embeds
+        .column.is-half
+          .embed
+            div(v-html="embeddableObjects[0]")
+
       .columns
         // People
         .column
@@ -130,6 +135,8 @@
 </template>
 
 <script>
+import * as qs from 'qs'
+
 import {fetchEntity, getEntities, deleteEntities, createEntity, API_URL} from '@/api'
 import {extractOptionsFromObjects} from '@/lib/util'
 
@@ -170,6 +177,31 @@ export default {
     },
     isAdmin () {
       return this.$store.getters['auth/isAdmin']
+    },
+    embeddableObjects () {
+      if (!this.project.links) {
+        return []
+      }
+
+      return this.project.links
+        .filter(l => {
+          if (l.url.indexOf('youtube') > -1 || l.url.indexOf('vimeo') > -1) {
+            return true
+          } else {
+            return false
+          }
+        })
+        .map(l => {
+          if (l.url.indexOf('youtube') > -1) {
+            const query = qs.parse(l.url.split('?')[1])
+            const videoCode = query.v
+
+            return `<iframe src="https://www.youtube.com/embed/${videoCode}"></iframe>`
+          }
+          if (l.url.indexOf('vimeo') > -1) {
+            return `<iframe src="${l.url.replace('vimeo.com', 'player.vimeo.com/video')}"></iframe>`
+          }
+        })
     }
   },
 
@@ -249,3 +281,15 @@ export default {
 
 }
 </script>
+
+<style lang="scss">
+.embeds {
+  padding-bottom: 20px;
+
+  iframe {
+    display: block;
+    width: 100%;
+    min-height: 360px;
+  }
+}
+</style>

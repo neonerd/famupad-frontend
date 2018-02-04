@@ -196,10 +196,21 @@ export default {
             const query = qs.parse(l.url.split('?')[1])
             const videoCode = query.v
 
-            return `<iframe src="https://www.youtube.com/embed/${videoCode}"></iframe>`
+            return `<iframe allowfullscreen="allowfullscreen"
+                      mozallowfullscreen="mozallowfullscreen" 
+                      msallowfullscreen="msallowfullscreen" 
+                      oallowfullscreen="oallowfullscreen" 
+                      webkitallowfullscreen="webkitallowfullscreen"
+                      src="https://www.youtube.com/embed/${videoCode}"></iframe>`
           }
           if (l.url.indexOf('vimeo') > -1) {
-            return `<iframe src="${l.url.replace('vimeo.com', 'player.vimeo.com/video')}"></iframe>`
+            return `<iframe 
+              allowfullscreen="allowfullscreen"
+              mozallowfullscreen="mozallowfullscreen" 
+              msallowfullscreen="msallowfullscreen" 
+              oallowfullscreen="oallowfullscreen" 
+              webkitallowfullscreen="webkitallowfullscreen"
+              src="${l.url.replace('vimeo.com', 'player.vimeo.com/video')}"></iframe>`
           }
         })
     }
